@@ -116,7 +116,7 @@ namespace task2207_clients {
             clients.RemoveAt(lstClients.SelectedIndex);
             lstClients.Items.RemoveAt(lstClients.SelectedIndex);
 
-            MessageBox.Show("Пользователь успешно удалён");
+            MessageBox.Show("Клиент успешно удалён");
         }
     }
 }

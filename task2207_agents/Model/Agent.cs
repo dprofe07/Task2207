@@ -14,7 +14,7 @@ public partial class Agent
     public string SecondName { get; set; } = null!;
 
     public byte? DealShare { get; set; }
-    public string? FullName { get {
+    public string FullName { get {
             return (LastName ?? "").Trim() + " " + (FirstName ?? "").Trim() + " " + (SecondName ?? "").Trim();
         }
     }

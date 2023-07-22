@@ -34,11 +34,63 @@ namespace task2207_agents {
         }
 
         private void btnSave_Click(object sender, EventArgs e) {
+            if (lstAgents.SelectedIndex == -1) {
+                MessageBox.Show("Сначала нужно выбрать клиента");
+                return;
+            }
+            if (txtFirstName.Text == "" || txtLastName.Text == "" || txtSecondName.Text == "") {
+                MessageBox.Show("Нужно заполнить все следующие поля: фамилия, имя, отчество", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Task2207Context? ctx = connectToDb();
+            if (ctx == null) {
+                return;
+            }
+            Agent ag;
+            if (creating) {
+                ag = new();
+                ag.Id = ctx.Agents.Select(x => x.Id).Max() + 1;
 
+
+            } else {
+                ag = ctx.Agents.Where(c => c.Id == agents[lstAgents.SelectedIndex].Id).First();
+            }
+
+            ag.FirstName = txtFirstName.Text;
+            ag.SecondName = txtSecondName.Text;
+            ag.LastName = txtLastName.Text;
+
+            if (creating) {
+                agents.Add(ag);
+                ctx.Add(ag);
+                lstAgents.Items.Add(ag.FullName);
+                lstAgents.SelectedIndex = lstAgents.Items.Count - 1;
+            }
+            agents[lstAgents.SelectedIndex] = ag;
+            lstAgents.Items[lstAgents.SelectedIndex] = ag.FullName;
+            ctx.SaveChanges();
+            creating = false;
+            MessageBox.Show("Сохранено");
         }
 
-        private void btnDelete_Click(object sender, EventArgs e) {
 
+        private void btnDelete_Click(object sender, EventArgs e) {
+            if (lstAgents.SelectedIndex == -1) {
+                MessageBox.Show("Сначала нужно выбрать клиента");
+                return;
+            }
+
+            Task2207Context? ctx = connectToDb();
+            if (ctx == null) {
+                return;
+            }
+
+            ctx.Agents.Remove(ctx.Agents.Where(c => c.Id == agents[lstAgents.SelectedIndex].Id).First());
+            ctx.SaveChanges();
+            agents.RemoveAt(lstAgents.SelectedIndex);
+            lstAgents.Items.RemoveAt(lstAgents.SelectedIndex);
+
+            MessageBox.Show("Риэлтор успешно удалён");
         }
 
         private void lstAgents_SelectedIndexChanged(object sender, EventArgs e) {
