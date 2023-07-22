@@ -35,7 +35,7 @@ namespace task2207_agents {
 
         private void btnSave_Click(object sender, EventArgs e) {
             if (lstAgents.SelectedIndex == -1) {
-                MessageBox.Show("Сначала нужно выбрать клиента");
+                MessageBox.Show("Сначала нужно выбрать риэлтора");
                 return;
             }
             if (txtFirstName.Text == "" || txtLastName.Text == "" || txtSecondName.Text == "") {
@@ -50,8 +50,6 @@ namespace task2207_agents {
             if (creating) {
                 ag = new();
                 ag.Id = ctx.Agents.Select(x => x.Id).Max() + 1;
-
-
             } else {
                 ag = ctx.Agents.Where(c => c.Id == agents[lstAgents.SelectedIndex].Id).First();
             }
@@ -59,6 +57,7 @@ namespace task2207_agents {
             ag.FirstName = txtFirstName.Text;
             ag.SecondName = txtSecondName.Text;
             ag.LastName = txtLastName.Text;
+            ag.DealShare = (byte)nudDealShare.Value;
 
             if (creating) {
                 agents.Add(ag);
@@ -76,7 +75,7 @@ namespace task2207_agents {
 
         private void btnDelete_Click(object sender, EventArgs e) {
             if (lstAgents.SelectedIndex == -1) {
-                MessageBox.Show("Сначала нужно выбрать клиента");
+                MessageBox.Show("Сначала нужно выбрать риэлтора");
                 return;
             }
 
@@ -91,6 +90,7 @@ namespace task2207_agents {
             lstAgents.Items.RemoveAt(lstAgents.SelectedIndex);
 
             MessageBox.Show("Риэлтор успешно удалён");
+            creating = false;
         }
 
         private void lstAgents_SelectedIndexChanged(object sender, EventArgs e) {
