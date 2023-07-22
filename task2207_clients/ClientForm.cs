@@ -11,11 +11,8 @@ namespace task2207_clients {
         }
 
         private void ClientForm_Load(object sender, EventArgs e) {
-            Task2207Context ctx;
-            try {
-                ctx = new();
-            } catch (Exception) {
-                MessageBox.Show("Нет соединения с БД", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Task2207Context? ctx = connectToDb();
+            if (ctx == null) {
                 Close();
                 return;
             }
